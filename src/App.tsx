@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 
 import { Drawer } from "@material-ui/core";
@@ -9,11 +9,9 @@ import Badge from "@material-ui/core/Badge";
 
 import { StyledButton, Wrapper } from "./App.styles";
 
-
 import Item from "./Item/Item";
 
 import Cart from "./Cart/Cart";
-
 
 export type CartItemType = {
   id: number;
@@ -31,7 +29,14 @@ const getProducts = async (): Promise<CartItemType[]> =>
 
 const App = () => {
   const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([] as CartItemType[]);
+  const [cartItems, setCartItems] = useState(() => {
+    const localData = localStorage.getItem("cartItems");
+    return localData ? JSON.parse(localData) : ([] as CartItemType[]);
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     "products",
@@ -42,11 +47,11 @@ const App = () => {
     items.reduce((accumolator: number, item) => accumolator + item.amount, 0);
 
   const handleAddToCart = (clickedItem: CartItemType) => {
-    setCartItems((prev) => {
-      const isItemInCart = prev.find((item) => item.id === clickedItem.id);
+    setCartItems((prev:any) => {
+      const isItemInCart = prev.find((item:any) => item.id === clickedItem.id);
 
       if (isItemInCart) {
-        return prev.map((item) =>
+        return prev.map((item:any) =>
           item.id === clickedItem.id
             ? { ...item, amount: item.amount + 1 }
             : item
@@ -57,8 +62,8 @@ const App = () => {
   };
 
   const handleRemoveFromCart = (id: number) => {
-    setCartItems((prev) =>
-      prev.reduce((accumaltor, item) => {
+    setCartItems((prev:any) =>
+      prev.reduce((accumaltor:any, item:any) => {
         if (item.id === id) {
           if (item.amount === 1) return accumaltor;
           return [...accumaltor, { ...item, amount: item.amount - 1 }];
@@ -83,7 +88,7 @@ const App = () => {
       </Drawer>
       <StyledButton onClick={() => setCartOpen(true)}>
         <Badge badgeContent={getTotalItems(cartItems)} color="error">
-          <AddShoppingCartIcon />
+          <AddShoppingCartIcon color="primary" fontSize="large" />
         </Badge>
       </StyledButton>
       <Grid container spacing={3}>

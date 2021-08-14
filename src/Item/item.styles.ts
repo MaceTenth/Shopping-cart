@@ -30,6 +30,13 @@ img{
 }
 
 
+img:hover,:focus{
+    transform: scale(1.2);
+    border: 2px solid black;
+}
+
+
+
 div{
     font-family: Arial, Helvetica, sans-serif;
     padding: 1rem;
