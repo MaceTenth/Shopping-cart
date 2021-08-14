@@ -8,12 +8,12 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Badge from "@material-ui/core/Badge";
 
 import { StyledButton, Wrapper } from "./App.styles";
-import { string } from "yargs";
+
 
 import Item from "./Item/Item";
 
 import Cart from "./Cart/Cart";
-import CartItem from "./CartItem/CartItem";
+
 
 export type CartItemType = {
   id: number;
