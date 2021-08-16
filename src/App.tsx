@@ -33,6 +33,8 @@ const App = () => {
     const localData = localStorage.getItem("cartItems");
     return localData ? JSON.parse(localData) : ([] as CartItemType[]);
   });
+  const [sortButton, setSortButton] = useState(false);
+  const toggle = () => setSortButton(!sortButton);
 
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
@@ -47,11 +49,11 @@ const App = () => {
     items.reduce((accumolator: number, item) => accumolator + item.amount, 0);
 
   const handleAddToCart = (clickedItem: CartItemType) => {
-    setCartItems((prev:any) => {
-      const isItemInCart = prev.find((item:any) => item.id === clickedItem.id);
+    setCartItems((prev: any) => {
+      const isItemInCart = prev.find((item: any) => item.id === clickedItem.id);
 
       if (isItemInCart) {
-        return prev.map((item:any) =>
+        return prev.map((item: any) =>
           item.id === clickedItem.id
             ? { ...item, amount: item.amount + 1 }
             : item
@@ -62,8 +64,8 @@ const App = () => {
   };
 
   const handleRemoveFromCart = (id: number) => {
-    setCartItems((prev:any) =>
-      prev.reduce((accumaltor:any, item:any) => {
+    setCartItems((prev: any) =>
+      prev.reduce((accumaltor: any, item: any) => {
         if (item.id === id) {
           if (item.amount === 1) return accumaltor;
           return [...accumaltor, { ...item, amount: item.amount - 1 }];
@@ -76,6 +78,8 @@ const App = () => {
 
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong...</div>;
+
+  console.log(sortButton);
 
   return (
     <Wrapper>
@@ -91,12 +95,38 @@ const App = () => {
           <AddShoppingCartIcon color="primary" fontSize="large" />
         </Badge>
       </StyledButton>
+      <button onClick={toggle}>Sort by price</button>
       <Grid container spacing={3}>
-        {data?.map((item) => (
-          <Grid item key={item.id} xs={12} sm={4}>
-            <Item item={item} handleAddToCart={handleAddToCart} />
-          </Grid>
-        ))}
+        {/* {sortButton === false
+          ? data?.map((item) => (
+              <Grid item key={item.id} xs={12} sm={4}>
+                <Item item={item} handleAddToCart={handleAddToCart} />
+              </Grid>
+            ))
+          : data
+              ?.sort((a, b) => (a.price > b.price ? 1 : -1))
+              .map((item) => (
+                <Grid item key={item.id} xs={12} sm={4}>
+                  <Item item={item} handleAddToCart={handleAddToCart} />
+                </Grid>
+              ))} */}
+
+        {sortButton &&
+          data
+            ?.sort((a, b) => (a.price < b.price ? -1 : 1))
+            .map((item) => (
+              <Grid item key={item.id} xs={12} sm={4}>
+                <Item item={item} handleAddToCart={handleAddToCart} />
+              </Grid>
+            ))}
+
+        {sortButton === false
+          ? data?.map((item) => (
+              <Grid item key={item.id} xs={12} sm={4}>
+                <Item item={item} handleAddToCart={handleAddToCart} />
+              </Grid>
+            ))
+          : null}
       </Grid>
     </Wrapper>
   );
