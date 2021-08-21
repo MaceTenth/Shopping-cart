@@ -9,13 +9,13 @@ border: 1px solid lightblue;
 height: 100%;
 border-radius: 0 0 20px 20px;
 
-button{
+.item-button{
     border-radius: 0 0 20px 20px;
     background-color: gray;
     color: white;
 }
 
-button:hover,:focus{
+.item-button:hover,:focus{
   
     background-color: lightgrey;
     color: black;

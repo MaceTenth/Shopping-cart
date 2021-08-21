@@ -15,10 +15,7 @@ svg{
     color: darkblue;
 }
 
-svg:hover{
-  
-    color: limegreen;
-}
+
 
 
 

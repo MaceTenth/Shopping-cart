@@ -41,7 +41,6 @@ const App = () => {
 
   const [sortButton, setSortButton] = useState(false);
 
-
   const Toggle = () => {
     setSortButton(!sortButton);
   };
@@ -84,16 +83,13 @@ const App = () => {
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong...</div>;
 
-
-  const handleSort = (array:any) => {
+  const handleSort = (array: any) => {
     if (sortButton) {
-      return array?.sort((a:any, b:any) => (a.price < b.price ? -1 : 1));
+      return array?.sort((a: any, b: any) => (a.price < b.price ? -1 : 1));
     } else {
-      return array?.sort((a:any, b:any) => (a.price > b.price ? -1 : 1));
+      return array?.sort((a: any, b: any) => (a.price > b.price ? -1 : 1));
     }
   };
-
-  
 
   return (
     <Wrapper>
@@ -105,22 +101,17 @@ const App = () => {
         />
       </Drawer>
       <StyledButton onClick={() => setCartOpen(true)}>
-        <Badge badgeContent={getTotalItems(cartItems)} color="error" overlap="circular">
+        <Badge badgeContent={getTotalItems(cartItems)} color="error">
           <AddShoppingCartIcon color="primary" fontSize="large" />
         </Badge>
       </StyledButton>
       <button onClick={Toggle}>Sort by price</button>
       <Grid container spacing={3}>
-       
-        {
-          handleSort(data).map((item:any) => (
-            <Grid item key={item.id} xs={12} sm={4}>
-              <Item item={item} handleAddToCart={handleAddToCart} />
-            </Grid>
-          ))}
-
-       
-
+        {handleSort(data).map((item: any) => (
+          <Grid item key={item.id} xs={12} sm={4}>
+            <Item item={item} handleAddToCart={handleAddToCart} />
+          </Grid>
+        ))}
       </Grid>
     </Wrapper>
   );
