@@ -30,8 +30,8 @@ img{
 }
 
 
-img:hover,:focus{
-    transform: scale(1.2);
+img:hover{
+
     border: 2px solid black;
 }
 

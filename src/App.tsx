@@ -28,22 +28,27 @@ const getProducts = async (): Promise<CartItemType[]> =>
   await (await fetch("https://fakestoreapi.com/products")).json();
 
 const App = () => {
+  const { data, isLoading, error } = useQuery<CartItemType[]>(
+    "products",
+    getProducts
+  );
+
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState(() => {
     const localData = localStorage.getItem("cartItems");
     return localData ? JSON.parse(localData) : ([] as CartItemType[]);
   });
+
   const [sortButton, setSortButton] = useState(false);
-  const toggle = () => setSortButton(!sortButton);
+
+
+  const Toggle = () => {
+    setSortButton(!sortButton);
+  };
 
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
-
-  const { data, isLoading, error } = useQuery<CartItemType[]>(
-    "products",
-    getProducts
-  );
 
   const getTotalItems = (items: CartItemType[]) =>
     items.reduce((accumolator: number, item) => accumolator + item.amount, 0);
@@ -81,6 +86,14 @@ const App = () => {
 
   console.log(sortButton);
 
+  const handleSort = (array:any) => {
+    if (sortButton) {
+      return array?.sort((a:any, b:any) => (a.price < b.price ? -1 : 1));
+    } else {
+      return array?.sort((a:any, b:any) => (a.price > b.price ? -1 : 1));
+    }
+  };
+
   return (
     <Wrapper>
       <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
@@ -95,38 +108,18 @@ const App = () => {
           <AddShoppingCartIcon color="primary" fontSize="large" />
         </Badge>
       </StyledButton>
-      <button onClick={toggle}>Sort by price</button>
+      <button onClick={Toggle}>Sort by price</button>
       <Grid container spacing={3}>
-        {/* {sortButton === false
-          ? data?.map((item) => (
-              <Grid item key={item.id} xs={12} sm={4}>
-                <Item item={item} handleAddToCart={handleAddToCart} />
-              </Grid>
-            ))
-          : data
-              ?.sort((a, b) => (a.price > b.price ? 1 : -1))
-              .map((item) => (
-                <Grid item key={item.id} xs={12} sm={4}>
-                  <Item item={item} handleAddToCart={handleAddToCart} />
-                </Grid>
-              ))} */}
+       
+        {
+          handleSort(data).map((item:any) => (
+            <Grid item key={item.id} xs={12} sm={4}>
+              <Item item={item} handleAddToCart={handleAddToCart} />
+            </Grid>
+          ))}
 
-        {sortButton &&
-          data
-            ?.sort((a, b) => (a.price < b.price ? -1 : 1))
-            .map((item) => (
-              <Grid item key={item.id} xs={12} sm={4}>
-                <Item item={item} handleAddToCart={handleAddToCart} />
-              </Grid>
-            ))}
+       
 
-        {sortButton === false
-          ? data?.map((item) => (
-              <Grid item key={item.id} xs={12} sm={4}>
-                <Item item={item} handleAddToCart={handleAddToCart} />
-              </Grid>
-            ))
-          : null}
       </Grid>
     </Wrapper>
   );
