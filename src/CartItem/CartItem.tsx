@@ -16,7 +16,13 @@ const CartItem: React.FC<Props> = ({ item, addToCart, removeFromCart }) => (
       <h3>{item.title}</h3>
       <div className="info">
         <p>Price ${item.price}</p>
-        <p>Total: ${(item.amount * item.price).toFixed(2)}</p>
+        <p>
+          Item Total:
+          {new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "USD",
+          }).format(item.amount * item.price)}
+        </p>
       </div>
 
       <div className="buttons">

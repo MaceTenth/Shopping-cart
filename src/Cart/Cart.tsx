@@ -30,7 +30,13 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
           removeFromCart={removeFromCart}
         />
       ))}
-      <h2>Cart Total: ${calculateTotal(cartItems)}</h2>
+      <h2>
+        Cart Total:
+        {new Intl.NumberFormat("en-IN", {
+          style: "currency",
+          currency: "USD",
+        }).format(+calculateTotal(cartItems))}
+      </h2>
     </Wrapper>
   );
 };

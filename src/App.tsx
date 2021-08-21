@@ -84,7 +84,6 @@ const App = () => {
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong...</div>;
 
-  console.log(sortButton);
 
   const handleSort = (array:any) => {
     if (sortButton) {
@@ -93,6 +92,8 @@ const App = () => {
       return array?.sort((a:any, b:any) => (a.price > b.price ? -1 : 1));
     }
   };
+
+  
 
   return (
     <Wrapper>
@@ -104,7 +105,7 @@ const App = () => {
         />
       </Drawer>
       <StyledButton onClick={() => setCartOpen(true)}>
-        <Badge badgeContent={getTotalItems(cartItems)} color="error">
+        <Badge badgeContent={getTotalItems(cartItems)} color="error" overlap="circular">
           <AddShoppingCartIcon color="primary" fontSize="large" />
         </Badge>
       </StyledButton>
